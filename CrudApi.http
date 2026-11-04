@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:5126
+
+GET {{baseUrl}}/weatherforecast/
+Accept: application/json
+
+### Get Product All
+GET {{baseUrl}}/api/v1/products
+Accept: application/json
+
+### Get Product By Code
+GET {{baseUrl}}/api/v1/products/PR002
+Accept: application/json
+
+### POST Product
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+    "code": "P001",
+    "name": "Mouse",
+    "price": 3000,
+    "stock": 12,
+    "category": "Elektronik"
+}
+
+### UPDATE DATA
+PUT {{baseUrl}}/api/v1/products/PR002
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Remote",
+    "price": 35000,
+    "stock": 20,
+    "category": "TV"
+}
+
+### Delete Product
+DELETE {{baseUrl}}/api/v1/products/P001
+Accept: application/json
