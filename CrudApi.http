@@ -39,3 +39,40 @@ Content-Type: application/json
 ### Delete Product
 DELETE {{baseUrl}}/api/v1/products/P001
 Accept: application/json
+
+### Get Customer All
+GET {{baseUrl}}/api/v1/customers
+Accept: application/json
+
+### Get Customer By Id
+GET {{baseUrl}}/api/v1/customers/C001
+Accept: application/json
+
+### POST Customer
+POST {{baseUrl}}/api/v1/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+    "code": "C002",
+    "name": "Banda",
+    "email": "banda@haram.com",
+    "phone": "087777777",
+    "address": "Jl. Bogor Bandung"
+}
+
+### UPDATE Customer
+PUT {{baseUrl}}/api/v1/customers/C001
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Badi",
+    "email": "badi@halal.com",
+    "phone": "0851111111",
+    "address": "Jl. Paledang Bogor"
+}
+
+### Delete Customer
+DELETE {{baseUrl}}/api/v1/customers/C001
+Accept: application/json

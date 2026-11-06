@@ -5,7 +5,7 @@ using CrudApi.Models;
 using CrudApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KodaStore.Api.Controllers;
+namespace CrudApi.Controllers;
 
 [ApiController]
 [Route("api/v1/products")]

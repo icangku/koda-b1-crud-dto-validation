@@ -15,8 +15,8 @@ public sealed class ProductRepository : IProductRepository
   public async Task<bool> Add(Product product, CancellationToken cancellationToken)
   {
     const string sql = """
-        INSERT INTO dbo.Product(Code, Name, Price, Stock, Category) VALUES
-        (@code, @name, @price, @stock, @category);
+        INSERT INTO dbo.Product(Code, Name, Email, Phone, Address) VALUES
+        (@code, @name, @email, @phone, @address);
         """;
         await using var connection = new SqlConnection(_connectionString);
 

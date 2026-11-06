@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CrudApi;
+namespace CrudApi.DTOs;
 
 public record CreateProductRequest(
   [Required, StringLength(30)]
