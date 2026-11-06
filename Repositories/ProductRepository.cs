@@ -1,4 +1,5 @@
 using System.Data;
+using CrudApi.DTOs;
 using CrudApi.Models;
 using Microsoft.Data.SqlClient;
 
@@ -15,31 +16,28 @@ public sealed class ProductRepository : IProductRepository
   public async Task<bool> Add(Product product, CancellationToken cancellationToken)
   {
     const string sql = """
-        INSERT INTO dbo.Product(Code, Name, Email, Phone, Address) VALUES
-        (@code, @name, @email, @phone, @address);
+        INSERT INTO dbo.Product(Code, Name, Price, Stock, Category, CustomerId) VALUES
+        (@code, @name, @price, @stock, @category, @customerId);
         """;
         await using var connection = new SqlConnection(_connectionString);
-
         await connection.OpenAsync(cancellationToken);
-
         await using var command = new SqlCommand(sql, connection);
 
         AddProductParameter(command, product);
 
         try
         {
-            var affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
-
-            return affectedRows == 1;
+          var affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
+          return affectedRows == 1;
         }
         catch (SqlException e) when (e.Number is 2601 or 2627)
         {
-            return false;
+          return false;
         }
         catch (SqlException e)
         {
-            Console.WriteLine($"SQL Error tidak terduga: {e.Number} - {e.Message}");
-            return false;
+          Console.WriteLine($"SQL Error tidak terduga: {e.Number} - {e.Message}");
+          return false;
         }
   }
 
@@ -85,13 +83,9 @@ public sealed class ProductRepository : IProductRepository
     """;
 
     await using var connection = new SqlConnection(_connectionString);
-
     await connection.OpenAsync(cancellationToken);
-
     await using var command = new SqlCommand(sql, connection);
-
     AddProductCode(command, code);
-
     await using var reader = await command.ExecuteReaderAsync(cancellationToken);
 
     if (!await reader.ReadAsync(cancellationToken))
@@ -129,15 +123,44 @@ public sealed class ProductRepository : IProductRepository
     command.Parameters.Add("@stock", SqlDbType.Int).Value = product.Stock;
     var price = command.Parameters.Add("@price", SqlDbType.Decimal);
     command.Parameters.Add("@category", SqlDbType.NVarChar, 80).Value = product.Category;
+    command.Parameters.Add("@customerId", SqlDbType.Int).Value = product.CustomerId;
 
     price.Precision = 18;
     price.Scale = 2;
     price.Value = product.Price;
   }
 
+  public async Task<IReadOnlyList<CustomerProductResponse>> GetByCustomerCode(int id, CancellationToken cancellationToken)
+  {
+    const string sql = """
+      SELECT c.Name AS CustomerName, p.Code AS ProductCode, p.Name AS ProductName, p.Price, p.Stock, p.Category
+      FROM dbo.Product p
+      INNER JOIN dbo.Customer c ON p.CustomerId = c.Id
+      WHERE p.CustomerId = @customerId
+      ORDER BY p.Code DESC;
+    """;
+
+    var products = new List<CustomerProductResponse>();
+    await using var connection = new SqlConnection(_connectionString);
+    await connection.OpenAsync(cancellationToken);
+    await using var command = new SqlCommand(sql, connection);
+    AddCustomerId(command, id);
+    await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+    while(await reader.ReadAsync(cancellationToken))
+    {
+      products.Add(ReadProductDto(reader));
+    }
+    return products;
+  }
+
   private static void AddProductCode(SqlCommand command, string productCode)
   {
     command.Parameters.Add("@code", SqlDbType.NVarChar, 30).Value = productCode.Trim().ToUpperInvariant();
+  }
+
+  private static void AddCustomerId(SqlCommand command, int customerId)
+  {
+    command.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
   }
 
   private static Product ReadProduct(SqlDataReader reader)
@@ -147,14 +170,29 @@ public sealed class ProductRepository : IProductRepository
       reader.GetString(1),
       reader.GetDecimal(2),
       reader.GetInt32(3),
-      reader.GetString(4)
+      reader.GetString(4),
+      reader.GetInt16(5)
     )
     {
       Code = reader.GetString(0),
       Name = reader.GetString(1),
       Price = reader.GetDecimal(2),
       Stock = reader.GetInt32(3),
-      Category = reader.GetString(4)
+      Category = reader.GetString(4),
+      CustomerId = reader.GetInt16(5)
     };
   }
+
+  private static CustomerProductResponse ReadProductDto(SqlDataReader reader)
+{
+    return new CustomerProductResponse
+    {
+        CustomerName = reader["CustomerName"].ToString(),
+        ProductCode = reader["ProductCode"].ToString(),
+        ProductName = reader["ProductName"].ToString(),
+        Price = Convert.ToDecimal(reader["Price"]),
+        Stock = Convert.ToInt32(reader["Stock"]),
+        Category = reader["Category"].ToString()
+    };
+}
 }

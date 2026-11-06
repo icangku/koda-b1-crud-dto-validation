@@ -13,5 +13,8 @@ public record class UpdateProductRequest(
   int Stock, 
 
   [Required, StringLength(30)]
-  string Category
+  string Category,
+
+  [Required, Range(0, 999)]
+  int CustomerId
 );

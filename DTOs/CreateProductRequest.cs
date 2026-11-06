@@ -16,5 +16,8 @@ public record CreateProductRequest(
   int Stock,
   
   [Required, StringLength(100)]
-  string Category
+  string Category,
+
+  [Required, Range(1, 9999999999)]
+  int CustomerId
 );

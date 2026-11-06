@@ -317,7 +317,7 @@
           }
         }
       },
-      "System.Security.Cryptography.Pkcs/9.0.18": {
+      "System.Security.Cryptography.Pkcs/9.0.21": {
         "type": "package",
         "compile": {
           "lib/net9.0/System.Security.Cryptography.Pkcs.dll": {
@@ -769,10 +769,10 @@
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
-    "System.Security.Cryptography.Pkcs/9.0.18": {
-      "sha512": "NKMKhUdLGNZryY9GXXTF5dXyP6S37EYXhiA2JYvwshJbd4DRq07IOS9it8Opi9atadvv5rlNkD76Mio+5Oo2aQ==",
+    "System.Security.Cryptography.Pkcs/9.0.21": {
+      "sha512": "KD+oHoYIxwNCajjVe58WVwq9cRpum+Pg3tRveDRtkcaw6w3oc7sNBoMRtb5P5OehI3bgv1ucMpgjf8lpj5J96A==",
       "type": "package",
-      "path": "system.security.cryptography.pkcs/9.0.18",
+      "path": "system.security.cryptography.pkcs/9.0.21",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -797,7 +797,7 @@
         "runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.xml",
         "runtimes/win/lib/net9.0/System.Security.Cryptography.Pkcs.dll",
         "runtimes/win/lib/net9.0/System.Security.Cryptography.Pkcs.xml",
-        "system.security.cryptography.pkcs.9.0.18.nupkg.sha512",
+        "system.security.cryptography.pkcs.9.0.21.nupkg.sha512",
         "system.security.cryptography.pkcs.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -840,7 +840,8 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "Microsoft.AspNetCore.OpenApi >= 10.0.12",
-      "Microsoft.Data.SqlClient >= 7.1.1"
+      "Microsoft.Data.SqlClient >= 7.1.1",
+      "System.Security.Cryptography.Pkcs >= 9.0.21"
     ]
   },
   "packageFolders": {
@@ -894,6 +895,10 @@
           "Microsoft.Data.SqlClient": {
             "target": "Package",
             "version": "[7.1.1, )"
+          },
+          "System.Security.Cryptography.Pkcs": {
+            "target": "Package",
+            "version": "[9.0.21, )"
           }
         },
         "imports": [
@@ -1332,27 +1337,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Security.Cryptography.Pkcs' 9.0.18 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-2fmv-rv2c-59x7",
-      "libraryId": "System.Security.Cryptography.Pkcs",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Security.Cryptography.Pkcs' 9.0.18 has a known high severity vulnerability, https://github.com/advisories/GHSA-846f-f764-76mx",
-      "libraryId": "System.Security.Cryptography.Pkcs",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }

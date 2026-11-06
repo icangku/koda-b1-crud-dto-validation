@@ -14,7 +14,7 @@ public sealed class ProductService : IProductService
 
   public async Task<ProductResponse?> Create(CreateProductRequest request, CancellationToken cancellationToken)
   {
-    var product = new Product(request.Code, request.Name, request.Price, request.Stock, request.Category);
+    var product = new Product(request.Code, request.Name, request.Price, request.Stock, request.Category, request.CustomerId);
     var created = await _repository.Add(product, cancellationToken);
     
     return created ? ProductResponse.FromModel(product) : null;
@@ -48,9 +48,16 @@ public sealed class ProductService : IProductService
     return product is null ? null : ProductResponse.FromModel(product);
   }
 
+  public async Task<IReadOnlyList<CustomerProductResponse>> GetByCustomerCode(int id, CancellationToken cancellationToken)
+  {
+    var products = await _repository.GetByCustomerCode(id, cancellationToken);
+
+    return products.Select(CustomerProductResponse.FromDto).ToArray();
+  }
+
   public async Task<ProductResponse?> Update(string code, UpdateProductRequest request, CancellationToken cancellationToken)
   {
-    var product = new Product(code, request.Name, request.Price, request.Stock, request.Category);
+    var product = new Product(code, request.Name, request.Price, request.Stock, request.Category, request.CustomerId);
     var updated = await _repository.Update(product, cancellationToken);
 
     return updated ? ProductResponse.FromModel(product) : null;

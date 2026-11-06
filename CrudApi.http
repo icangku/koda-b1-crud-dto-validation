@@ -8,7 +8,11 @@ GET {{baseUrl}}/api/v1/products
 Accept: application/json
 
 ### Get Product By Code
-GET {{baseUrl}}/api/v1/products/PR002
+GET {{baseUrl}}/api/v1/products/product/PR002
+Accept: application/json
+
+### Get Product By Customer Id
+GET {{baseUrl}}/api/v1/products/customer/2
 Accept: application/json
 
 ### POST Product
@@ -17,11 +21,12 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "code": "P001",
-    "name": "Mouse",
+    "code": "PR006",
+    "name": "Babi",
     "price": 3000,
     "stock": 12,
-    "category": "Elektronik"
+    "category": "Hewan",
+    "customerId": 2
 }
 
 ### UPDATE DATA

@@ -27,7 +27,7 @@ public sealed class ProductController : ControllerBase
       return Ok(products);
     }
 
-    [HttpGet("{code}")]
+    [HttpGet("product/{code}")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductResponse>> GetByCode([FromRoute] string code, CancellationToken cancellationToken)
@@ -36,6 +36,17 @@ public sealed class ProductController : ControllerBase
 
       return product is null ? Problem(statusCode: StatusCodes.Status404NotFound, title: "Product not found") : Ok(product);
     }
+
+    [HttpGet("customer/{id}")]
+    [ProducesResponseType(typeof(CustomerProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CustomerProductResponse>> GetByCustomerCode([FromRoute] int id, CancellationToken cancellationToken)
+    {
+      var product = await _service.GetByCustomerCode(id, cancellationToken);
+
+      return product is null ? Problem(statusCode: StatusCodes.Status404NotFound, title: "Customer not found") : Ok(product);
+    }
+    
     
     [HttpPost]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status201Created)]
@@ -48,7 +59,7 @@ public sealed class ProductController : ControllerBase
 
           if (created is null)
           {
-            return Problem(statusCode: StatusCodes.Status409Conflict, title: "Product code already exists");
+            return Problem(statusCode: StatusCodes.Status409Conflict, title: "Error");
           }
 
           return CreatedAtAction(nameof(GetByCode), new { code = created.Code }, created);
